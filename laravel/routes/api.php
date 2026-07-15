@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->group(function () {
 // History Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/history', [HistoryController::class, 'index']);
+    Route::delete('/history/{id}', [HistoryController::class, 'destroy']);
 });

@@ -13,6 +13,9 @@ class AiController extends Controller
 
 public function debugCode(Request $request)
 {
+    if (empty(env('GROQ_API_KEY'))) {
+        return response()->json(['error' => 'Please add your GROQ_API_KEY in the Laravel .env file to use the AI features.'], 400);
+    }
 
 $code = $request->code;
 $language = $request->language;
@@ -25,7 +28,7 @@ Explain errors and give fixed code:
 $response = Http::withHeaders([
     'Authorization' => 'Bearer '.env('GROQ_API_KEY'),
     'Content-Type' => 'application/json'
-    ])->post("https://api.groq.com/openai/v1/chat/completions", [
+    ])->withoutVerifying()->post("https://api.groq.com/openai/v1/chat/completions", [
     
     "model" => "llama-3.1-8b-instant",
     
@@ -73,6 +76,9 @@ return response()->json($content);
 
 public function generateEmail(Request $request)
 {
+    if (empty(env('GROQ_API_KEY'))) {
+        return response()->json(['error' => 'Please add your GROQ_API_KEY in the Laravel .env file to use the AI features.'], 400);
+    }
 
 $prompt = "
 Generate professional email.
@@ -85,7 +91,7 @@ Content idea: ".$request->content."
 $response = Http::withHeaders([
 'Authorization' => 'Bearer '.env('GROQ_API_KEY'),
 'Content-Type' => 'application/json'
-])->post("https://api.groq.com/openai/v1/chat/completions", [
+])->withoutVerifying()->post("https://api.groq.com/openai/v1/chat/completions", [
 
 "model" => "llama-3.1-8b-instant",
 

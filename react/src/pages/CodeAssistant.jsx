@@ -31,8 +31,9 @@ export default function CodeAssistant() {
     }
   }, [messages]);
 
-  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const submit = async () => {
     if (!prompt.trim()) return;
@@ -48,7 +49,7 @@ export default function CodeAssistant() {
       const result = typeof res.data === "string" ? res.data : JSON.stringify(res.data, null, 2);
       setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", content: result }]);
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      setError(err.response?.data?.error || err.response?.data?.message || "Something went wrong. Please try again.");
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
